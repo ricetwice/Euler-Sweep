@@ -3,6 +3,8 @@
 //
 
 #include "Brep.h"
+#include <iostream>
+#include <unordered_map>
 
 void Face::addLoop(std::shared_ptr<Loop> lp) {
     if (m_floop == nullptr)
@@ -14,6 +16,16 @@ void Face::addLoop(std::shared_ptr<Loop> lp) {
     for (; curlp->next() != nullptr; curlp = curlp->next());
     curlp->next() = lp;
     lp->prev() = curlp;
+}
+
+void Face::printLoops() const {
+    int lp_cnt = 0;
+    for (auto lp = m_floop; lp != nullptr; lp = lp->next(), lp_cnt++)
+    {
+        std::cout << "lp" << lp_cnt << ": ";
+        lp->printLoop();
+    }
+    std::cout << std::endl;
 }
 
 void Solid::addVertex(std::shared_ptr<Vertex> v) {
@@ -65,4 +77,43 @@ bool Solid::deleteFace(std::shared_ptr<Face> f) {
         return true;
     }
     return false;
+}
+
+void Solid::printFaces() const {
+    int f_cnt = 0;
+    for (auto f = m_sface; f != nullptr; f = f->next(), f_cnt++)
+    {
+        std::cout << "F" << f_cnt << ":" << std::endl;
+        f->printLoops();
+    }
+    std::cout << std::endl;
+}
+
+std::pair<std::vector<Vec3>, std::vector<std::array<int, 2>>> Solid::getCurveFrame() const {
+    std::vector<Vec3> nodes;
+    std::vector<std::array<int, 2>> edges;
+    std::unordered_map<std::shared_ptr<Vertex>, int> vertexRecorder;
+    int v_cnt = 0;
+    for (auto v = m_svertex; v != nullptr; v = v->next(), v_cnt++)
+    {
+        nodes.push_back(v->pos());
+        vertexRecorder[v] = v_cnt;
+    }
+    for (auto e = m_sedge; e != nullptr; e = e->next())
+    {
+        edges.push_back({vertexRecorder[e->halfEdge(0)->vertex()], vertexRecorder[e->halfEdge(1)->vertex()]});
+    }
+    return {nodes, edges};
+}
+
+void Loop::printLoop() const {
+    if (m_ledge)
+    {
+        std::cout << "( " << m_ledge->vertex()->pos() << " ), ";
+        for (auto he = m_ledge->next(); he != m_ledge; he = he->next())
+        {
+            std::cout <<  "( " << he->vertex()->pos() << " ), ";
+        }
+        std::cout << std::endl;
+    }
 }

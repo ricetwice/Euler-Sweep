@@ -43,7 +43,7 @@ std::shared_ptr<HalfEdge> EulerOp::mev(const Vec3& p, std::shared_ptr<Vertex> v1
         auto he = lp->halfEdge();
         for(; he->next()->vertex() != v1; he = he->next());
         he2->next() = he->next();
-        he->prev() = he2;
+        he->next()->prev() = he2;
         he->next() = he1;
         he1->prev() = he;
     }
@@ -60,24 +60,25 @@ std::shared_ptr<Face> EulerOp::mef(std::shared_ptr<Vertex> v1, std::shared_ptr<V
     auto s = v1->solid();
     s->addFace(f);
     s->addEdge(eg);
-    lp1->next() = lp2;
-    lp2->prev() = lp1;
-    f->loop() = lp1;
+    f->loop() = lp2;
+    lp2->face() = f;
     f->solid() = s;
-    auto he1_loop = lp1->halfEdge(), he2_loop = lp1->halfEdge();
-    for (; he1_loop->vertex() != v1 ; he1_loop = he1_loop->next());
-    for (; he2_loop->vertex() != v2 ; he2_loop = he2_loop->next());
-    lp2->halfEdge() = he2_loop;
-    //connect loop containing he2
-    he2_loop->prev()->next() = he2;
-    he2->prev() = he2_loop->prev();
-    he2->next() = he1_loop;
-    he1_loop->prev() = he2;
+    auto he1_next = lp1->halfEdge(), he2_next = lp1->halfEdge();
+    for (; he1_next->vertex() != v2 ; he1_next = he1_next->next());
+    for (; he2_next->vertex() != v1 ; he2_next = he2_next->next());
+    auto he1_prev = he2_next->prev(), he2_prev = he1_next->prev();
     //connect loop containing he1
-    he1_loop->prev()->next() = he1;
-    he1->prev() = he1_loop->prev();
-    he1->next() = he2_loop;
-    he2_loop->prev()->prev() = he1;
+    he1->next() = he1_next;
+    he1_next->prev() = he1;
+    he1->prev() = he1_prev;
+    he1_prev->next() = he1;
+    //connect loop containing he2
+    he2->next() = he2_next;
+    he1_next->prev() = he2;
+    he2->prev() = he2_prev;
+    he2_prev->next() = he2;
+    lp2->halfEdge() = he2;
+    lp1->halfEdge() = he1;
 
     return f;
 }

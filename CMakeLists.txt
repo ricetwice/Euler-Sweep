@@ -19,6 +19,7 @@ FetchContent_MakeAvailable(polyscope)
 
 include_directories(include)
 add_subdirectory(src)
+add_subdirectory(tests)
 add_executable(Euler_Sweep main.cpp)
 target_link_libraries(Euler_Sweep lib_Euler_Sweep)
 target_link_libraries(Euler_Sweep polyscope)
