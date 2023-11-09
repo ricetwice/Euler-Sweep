@@ -26,14 +26,14 @@ public:
     Vertex(Vec3 p, std::shared_ptr<Solid> s): m_pos(std::move(p)), m_solid(std::move(s)){}
     std::shared_ptr<Vertex>& next()  {return m_next;}
     std::shared_ptr<Vertex>& prev()  {return m_prev;}
-    std::shared_ptr<HalfEdge>& halfEdge()  {return m_he;}
+//    std::shared_ptr<HalfEdge>& halfEdge()  {return m_he;}
     std::shared_ptr<Solid>& solid() {return m_solid;}
 
     [[nodiscard]] Vec3 pos() const {return m_pos;}
 
 private:
     std::shared_ptr<Vertex> m_next, m_prev;
-    std::shared_ptr<HalfEdge> m_he;
+//    std::shared_ptr<HalfEdge> m_he;
     std::shared_ptr<Solid> m_solid;
     // geometry
     Vec3 m_pos;
@@ -50,6 +50,7 @@ public:
     std::shared_ptr<Loop>& loop()  {return m_wloop;}
 
     std::shared_ptr<HalfEdge>& sibling() {return m_sibling;}
+    std::shared_ptr<Vertex> tipVertex() const {return m_sibling->vertex();}
 private:
     std::shared_ptr<Vertex> m_vertex;
     std::shared_ptr<HalfEdge> m_prev, m_next, m_sibling;

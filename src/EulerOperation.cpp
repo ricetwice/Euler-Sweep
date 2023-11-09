@@ -74,7 +74,7 @@ std::shared_ptr<Face> EulerOp::mef(std::shared_ptr<Vertex> v1, std::shared_ptr<V
     he1_prev->next() = he1;
     //connect loop containing he2
     he2->next() = he2_next;
-    he1_next->prev() = he2;
+    he2_next->prev() = he2;
     he2->prev() = he2_prev;
     he2_prev->next() = he2;
     lp2->halfEdge() = he2;

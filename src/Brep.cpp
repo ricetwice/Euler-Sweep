@@ -110,8 +110,14 @@ void Loop::printLoop() const {
     if (m_ledge)
     {
         std::cout << "( " << m_ledge->vertex()->pos() << " ), ";
-        for (auto he = m_ledge->next(); he != m_ledge; he = he->next())
+        auto he_fast = m_ledge->next()->next();
+        for (auto he = m_ledge->next(); he != m_ledge; he = he->next() , he_fast = he_fast->next()->next())
         {
+            if (he == he_fast)
+            {
+                std::cerr << "The loop is not closed!" << std::endl;
+                exit(-1);
+            }
             std::cout <<  "( " << he->vertex()->pos() << " ), ";
         }
         std::cout << std::endl;

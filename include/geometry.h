@@ -7,6 +7,6 @@
 
 #include <Eigen/Dense>
 
-using Vec3 =  Eigen::Vector3f;
+using Vec3 =  Eigen::Matrix<float, 1, 3>;
 
 #endif //EULER_SWEEP_GEOMETRY_H
