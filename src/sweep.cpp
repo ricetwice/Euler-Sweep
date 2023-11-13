@@ -5,6 +5,7 @@
 #include "sweep.h"
 
 void sweep(std::shared_ptr<Face> F, const Vec3 &V, float d) {
+    std::shared_ptr<Face> outerFace;
     for (auto L = F->loop(); L != nullptr; L = L->next())
     {
         std::vector<std::shared_ptr<Vertex>> loopVertices;
@@ -14,7 +15,7 @@ void sweep(std::shared_ptr<Face> F, const Vec3 &V, float d) {
         }
         auto firstV = L->halfEdge()->vertex();
         auto firstUp = EulerOp::mev(firstV->pos()+d*V, firstV, L)->tipVertex();
-        L->printLoop();
+//        L->printLoop();
         auto prevUp = firstUp;
         for (auto nextV : loopVertices)
         {
@@ -24,6 +25,13 @@ void sweep(std::shared_ptr<Face> F, const Vec3 &V, float d) {
 //            L->printLoop();
             prevUp = up;
         }
-        EulerOp::mef(prevUp,firstUp , L);
+        EulerOp::mef(prevUp, firstUp, L);
+//        if (L == F->loop())
+//            outerFace = EulerOp::mef(prevUp,firstUp , L);
+//        else
+//        {
+//            auto innerFace = EulerOp::mef(prevUp, firstUp, L);
+//            EulerOp::kfmrh(innerFace, outerFace);
+//        }
     }
 }

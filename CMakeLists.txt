@@ -14,6 +14,7 @@ FetchContent_Declare(
         GIT_TAG        v1.3.0
 )
 
+
 # CMake 3.14+
 FetchContent_MakeAvailable(polyscope)
 

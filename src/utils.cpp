@@ -33,5 +33,6 @@ std::shared_ptr<Solid> createDoubleSquare(const Vec3 & center,float L, float l) 
     auto he7 = EulerOp::mev(center + Vec3 {a,b,0}, he6->sibling()->vertex(), f->loop());
     auto f2 = EulerOp::mef(he5->vertex(), he7->sibling()->vertex(), f->loop());
     EulerOp::kemr(conEdge, f->loop());
+    EulerOp::kfmrh(f2, lp->face());
     return S;
 }

@@ -2,19 +2,23 @@
 #include "polyscope/surface_mesh.h"
 #include "polyscope/point_cloud.h"
 #include "EulerOperation.h"
+#include "sweep.h"
+#include "utils.h"
+
+
+
 
 // Initialize polyscope
 int main()
 {
+    auto S = createDoubleSquare({0,0,0},  1.5f, 0.5f);
+    sweep(S->face(), {0,0,1}, 1.0f);
+    S->printFaces();
+    auto [V, F] = S->getTriangulation();
     polyscope::init();
-
-    std::vector<glm::vec3> points({glm::vec3(0,0,0), glm::vec3(1,0,0), glm::vec3(0,1,0), glm::vec3(0,0,1)});
-
-// Register a point cloud
-// `points` is a Nx3 array-like container of points
-    polyscope::registerPointCloud("my points", points);
-
-// View the point cloud and mesh we just registered in the 3D UI
+//    polyscope::options::groundPlaneMode = polyscope::GroundPlaneMode::None;
+    auto mesh = polyscope::registerSurfaceMesh("cube", V, F);
+    mesh->setBackFacePolicy(polyscope::BackFacePolicy::Custom);
     polyscope::show();
 
 }

@@ -51,6 +51,7 @@ public:
 
     std::shared_ptr<HalfEdge>& sibling() {return m_sibling;}
     std::shared_ptr<Vertex> tipVertex() const {return m_sibling->vertex();}
+    [[nodiscard]] Vec3 getVec() const;
 private:
     std::shared_ptr<Vertex> m_vertex;
     std::shared_ptr<HalfEdge> m_prev, m_next, m_sibling;
@@ -101,6 +102,8 @@ public:
 
     void addLoop(std::shared_ptr<Loop> lp);
     void printLoops() const;
+
+    Axis getFaceAxis() const;
 private:
     std::shared_ptr<Loop> m_floop;
     std::shared_ptr<Face> m_prev, m_next;
@@ -118,6 +121,7 @@ public:
 
     void printFaces() const;
     [[nodiscard]] std::pair<std::vector<Vec3>, std::vector<std::array<int, 2>>> getCurveFrame() const;
+    [[nodiscard]] std::pair<Eigen::MatrixXf, Eigen::MatrixXi> getTriangulation() const;
 
     void addVertex(std::shared_ptr<Vertex> v);
     void addEdge(std::shared_ptr<Edge> eg);

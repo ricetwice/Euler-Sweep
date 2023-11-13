@@ -98,6 +98,7 @@ std::shared_ptr<Loop> EulerOp::kemr(std::shared_ptr<Edge> eg, std::shared_ptr<Lo
         he->next() = lp_new->halfEdge();
         lp_new->halfEdge()->prev() = he;
         lp->face()->addLoop(lp_new);
+        lp_new->face() = lp->face();
     }
 
     //delete edge
@@ -109,6 +110,7 @@ std::shared_ptr<Loop> EulerOp::kemr(std::shared_ptr<Edge> eg, std::shared_ptr<Lo
 void EulerOp::kfmrh(std::shared_ptr<Face> innerFace, std::shared_ptr<Face> outerFace)
 {
     outerFace->addLoop(innerFace->loop());
+    innerFace->loop()->face() = outerFace;
     innerFace->solid()->deleteFace(innerFace);
 }
 
