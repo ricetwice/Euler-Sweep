@@ -179,8 +179,8 @@ std::pair<Eigen::MatrixXf, Eigen::MatrixXi> Solid::getTriangulation() const {
             E.row(i) << edge_indices[i][0],edge_indices[i][1];
         for (int i = 0; i < points_in_holes.size(); ++i)
             H.row(i) << points_in_holes[i];
-        std::cout << "V : " << V << std::endl;
-        std::cout << "H : " << H << std::endl;
+//        std::cout << "V : " << V << std::endl;
+//        std::cout << "H : " << H << std::endl;
         // add point in the hole
         // Triangulated interior
         Eigen::MatrixXf V2;
